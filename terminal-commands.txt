@@ -1,2 +1,4 @@
 rm -rf -recursive delete files and/or folders
-mv <from> <to> -move/rename file with 2 params 
+mv <from> <to> -move/rename file with 2 params
+ls -a -see all files and folders (hidden included)
+ 
