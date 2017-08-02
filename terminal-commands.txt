@@ -1,0 +1,2 @@
+rm -rf -recursive delete files and/or folders
+mv <from> <to> -move/rename file with 2 params 
