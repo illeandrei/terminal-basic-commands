@@ -1,2 +1,2 @@
 git config --global core.editor "gedit -s"      -for ubuntu
-git config --global core.editor "notepad++"	-for windows
+git config --global core.editor "notepad++.ext -multiInst -nosession"	-for windows
