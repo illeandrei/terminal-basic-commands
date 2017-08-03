@@ -1,3 +1,158 @@
-git config --global -e	-> see all git global configs
+//check git version
+git version
+
+//config global git configs
+git config --global -e
 git config --global core.editor "gedit -s"      -> for ubuntu
 git config --global core.editor "notepad++.ext -> multiInst -nosession"	-for windows
+
+//crete README.md file with content
+echo "Some content inside README file" >> README.md
+
+//chech content of txt file
+cat start.txt
+
+//check git status of project
+git status
+
+//add file to git stating area
+git add start.txt
+
+//add file from staging area to ./git repo (hidden folder)
+git commit -m "Adding start text file to git"
+
+//push changes to remote repo
+git push origin master 
+
+
+------------- config notepadd++ as git core editor -------------
+//add home dir of notepad++ to system variables/Path
+
+//make sure you can lunch notepad++ from cmd
+notepad++
+
+//create .bash_profile file for git alias and add following content:
+alias npp='notepad++.exe -multiInst -nosession'
+
+//check global git config file (~ is a shorthand for users home directory)
+cat ~/.gitconfig
+
+//set notepad++ as git core editor	
+git config --global core.editor "notepad++.exe -multiInst -nosession"
+
+//list all configs form user level
+git config --global --list
+
+//test git core editor
+git config --global -e
+
+------------- create git fresh-project -------------
+//init git
+git init fresh-project
+
+//list all files and folders (hidden included)
+ls -al
+
+//create hipster.txt file with lorem ipsum content from www.hipsum.co
+npp hipster.txt
+
+//add hipster.txt to git staging area - a file that is wating to be commited
+git add hispter.txt
+
+
+//commit changes and add commit message from notepad++
+git commit
+
+------------- adding git to existing project -------------
+http://www.initializr.com/ - start html project in 15 sec.
+
+//unzip downloaded html project
+//cd to project
+unzip ~/Downloads//initializr-verekia-4.0.zip
+
+//move or rename project from 'initializr' to 'web-project' name
+mv initializr ../web-project
+
+//initialize git repo in the /web-project folder
+git init
+
+//add all untracked files to staging area
+git add .
+
+//the git repository is managed by the .git (hidden) folder
+//if the .git folder is deleted this project will no longer be managed by git
+//this can be done using this command: 
+rm -rf .git
+
+//it is a best practice to update your local git repo before pushing to remote repo
+git pull origin master
+
+//the git push will push any changes from local repo to the remote repo by reference and by branch name
+//"origin" is the name of the remote repository/reference that we cloned from 
+//"master" is the name of the branch
+git push origin master
+
+------------- tracking files -------------
+//a tracked file is any file that git is aware of tracking activly, any file that has been added to the git directory,
+//any file that has been added to the git staging area.
+
+//to find out if your file is beening tracked by git, use the following command: 
+git ls-files
+
+//you can add and commit changes in 1 command instead of git add and git commit
+// -am (a - stands for "add to staging") (m - stands for "commit message")
+git commit -am "commit message" 
+
+------------- recursive adding -------------
+//make deep nested folders 
+mkdir -p level1/level2/level3/level4
+
+//make levelx-file.txt for each directory level
+//to add all the files to the stating area and the commit them:
+git add .
+git commit
+
+------------- backing out changes -------------
+//to unstage changes made to a file:
+git reset HEAD <filename>
+
+//this reverts any changes, and moves the file back to changes not to be commited state (working directory)
+
+//to revert even the changes made to the file that git sees as modified in the working directory:
+git checkout -- <filename>
+
+------------- git rename and move file -------------
+//track renamed filels with git
+git mv <filename> <newFileName>
+
+//"file renamed" label will be added in the next git commit
+//best practice is to rename files before any changes
+
+//if you rename the file using the operating sistem or bash
+mv <filename> <newFileName>
+
+//git will see this as <filename> beeing deleted and <newFileName> as a new untracked file
+//git needs to be notified that a file was renamed outside of git commands
+git add -A            (A - stand for detect any renamed, moved or deleted files)
+
+//to unstage any file renames you can use the:
+git rest HEAD 2.txt
+
+//or you can simply rename it back to its older version
+git mv <filename> <oldFileName>
+
+------------- deleting files -------------
+//you can't "git rm" files that where not staged yet
+//unstanged files will be removed using the bash commands
+rm <filename>
+
+//to remove files that where staged or commited use: 
+git rm <filename>
+
+//to unde a delete, you first have to remove it from staging
+gir reset HEAD <filename>
+
+//still "git status" shows that a file was deleted but not tracked, so the file is not yet restored in the file system
+//to restore the file: 
+git checkout -- <filename>
+
