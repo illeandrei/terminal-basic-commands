@@ -1,13 +1,29 @@
-//check git version
+GIT 
+
+------------- git overview -------------
+-there are 3 layers in a git project
+1. working directory
+2. staging area
+3. git repo (directory) - ./git (git hidden folder)
+4. git remote repo which is in turn is composed of the same 3 layers as above
+
+------------- git setup -------------
+//chech if git version or if git is installed
 git version
 
 //config global git configs
-git config --global -e
-git config --global core.editor "gedit -s"      -> for ubuntu
-git config --global core.editor "notepad++.ext -> multiInst -nosession"	-for windows
+git config --global user.name "Trololo Troll"
+git config --global user.email "bla@bla.com"
+git config --global --list
 
-//crete README.md file with content
-echo "Some content inside README file" >> README.md
+//clone github project
+git clone github-https-url # past in github HTTPS clone URL
+
+//check if projects was cloned
+ls
+
+//crete .txt file with content
+echo "Some content inside text file" >> start.txt
 
 //chech content of txt file
 cat start.txt
@@ -62,6 +78,7 @@ git add hispter.txt
 
 //commit changes and add commit message from notepad++
 git commit
+
 
 ------------- adding git to existing project -------------
 http://www.initializr.com/ - start html project in 15 sec.
@@ -156,3 +173,169 @@ gir reset HEAD <filename>
 //to restore the file: 
 git checkout -- <filename>
 
+------------- git logs -------------
+git log --all --graph --decorate --oneline
+
+//use git global configs to set alias so that we can use shorthand for the command above
+git config --global alias.hist "log --all --graph --decorate --oneline"
+
+//now just use
+git hist
+
+------------- ignore unwanted files and folder -------------
+//create .gitingore file
+//the .gitignore rules are: 
+//specific file: MyFile.ext
+//file pattern: *ext
+//folder: my-folder/
+
+------------- merge and diff visual tool -------------
+//Visual Diff/Merge Tool setup - p4merge: https://www.perforce.com/products/helix-apps/merge-diff-tool-p4merge
+//p4merge.path Windows
+git config --global merge.tool p4merge
+git config --global mergetool.p4merge.path "C:/Program Files/p4merge.exe"
+git config --global diff.tool p4merge
+git config --global difftool.p4merge.path "C:/Program FIles/p4merge.ext"
+
+//disable prompt for both merge and diff
+git config --global difftool.prompt false
+git config --global mergetool.prompt false
+
+//to see changes between staged and unstaged files
+git diff 	(native use)
+git difftool 	(using the merge tool)
+
+//to see changes between last commit and remote repository
+git diff HEAD	(native use)
+git difftool HEAD	(using the visual merge tool)
+
+//compare staged area to HEAD (last commit on the current branch)
+git difftool --staged HEAD
+
+//limited comparrison to one file (or path)
+git diff -- <paht to file>	(native use)
+git diff -- README.md	(example usage)
+git difftool -- README.md	(using the visual merge tool)
+
+//comparing between commits
+git log --oneline //to display all the commits with their id's
+git diff <commitId1> <commitId2>
+git diff 34f63b HEAD //compare the 34f63b commitId with the HEAD version
+git diff HEAD HEAD^ //compare current version with current version - 1
+git difftool <commitId1> <commitId2> //compare 2 version using the visual merge tool
+
+//comparing between local and remote master branch
+git diff master origin/master //master - is the local repo | origin/master - is the remote repo
+
+------------- branching basics -------------
+//display all local branches
+git branch
+
+//display all branches (including remote branches)
+git branch -a
+
+//create new branch
+git branch <name>
+
+//checkout on new local branch
+git checkout <branchName>
+git branch -a //see which branch is selected
+
+//rename branch
+git branch -m <currentBranchName> <newBranchName>
+
+//deletes only the branch label but the branch is still visible in logs (git  hist)
+git branch -d <branchName>	//you can't delete a branch that you are currently on
+
+
+------------- happy path / fast forword merges -------------
+//create new branch and chechout in one line
+git checkout -b <branchName>
+
+//see changes between 2 branches
+git diff <branch1> <branch2>
+
+//see changes  using the visual merging tool
+git difftool <branch1> <branch2>
+
+//merge branch in the branch that I'm currently checked in
+git merge <branchToMergeIntoCurrentBranch>
+
+
+------------- happy path / disable fast forword merges -------------
+git merge add-copyright --no-ff		//which will result in a commit merge that allows to add a label to the merge
+
+//commit changes with inline message
+git merge <branchName> -m "some text"
+
+------------- conflicting merges and resolution -------------
+//check differences between branches
+git diff <branch1> <branch2>
+
+//merge branch in currently checked in branch
+git merge <branch2>		//if conflicts are found you will be checked out into a intermediar "merging branch" (master|MERGING)
+
+//resolve merge conflicts using the visual tool (p4merge)
+git mergetool
+
+//commit after resolving merge conflicts which will bring as back to the original branch that we where checked in
+//now if we check for changes using 'git status' we will see that there is an untracked file  with a *.orig extentions
+//which actually is a copy of the file on which we fixed the merge conflicts
+//now this file can be ignored (by adding it to the .gitignore file or by simply removeing it all togheter)
+
+------------- rebaseing -------------
+//bring the latest changes from master to your currrent working branch in order to avoid masive future merges.
+//so you want to rebase master into the feature branch
+git rebase <sourceBranch>	//in this case "master"
+
+//aborting a rebase
+git rebase --abort
+
+//in case of rebase merging conflicts
+git rebase <sourceBranch>
+git mergetool	//to visualy solve merging conflicts
+git rebase --continue	//to continue rebase process
+
+//to only update the references from the remote to the local repo without causing merge conflicts
+git fetch origin master
+
+//if the branches have diverged the you can pull using a rebase param
+git pull --rebase origin master		//this will couse a rebase instead of a normal merge
+
+------------- stashing -------------
+//to put aside some changes and quickly commit something now, use the stash command
+git stash
+
+//after commiting some other changes, to get back the changes that were stashed:
+git stash apply
+
+//to see any entries in the stash area: 
+git stash list
+
+//to clear the stash:
+git stash drop
+
+//note that git will stash only tracked files
+//to also include any untracked files (that are not being excluded by git ignore file), use: 
+git stash -u
+
+//to "git stash apply" and "git stash drop" in one line, use: 
+git stash pop
+
+//to add a commit message for a stash - it makes it easier to diferentiate between many stashes
+git stash save "some message"
+
+//to show specific stash:
+git stash show stash@{stashIndex}
+
+//to apply specific stash:
+git stash apply stash@{stashIndex}
+
+//to drop specific stash: 
+git stash drop stash@{stashIndex}
+
+//to clear all stashes
+git stash clear
+
+//to stash all changes to a new branch
+git stash branch <branchName>
