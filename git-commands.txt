@@ -5,7 +5,7 @@ GIT
 1. working directory
 2. staging area
 3. git repo (directory) - ./git (git hidden folder)
-4. git remote repo which is in turn is composed of the same 3 layers as above
+(4.) git remote repo which in turn is composed of the same 3 layers as above
 
 ------------- git setup -------------
 //chech if git version or if git is installed
@@ -339,3 +339,22 @@ git stash clear
 
 //to stash all changes to a new branch
 git stash branch <branchName>
+
+------------- tag -------------
+//to mark significant events of milestones into our git repo, we could use tha tagging support
+//tags are nothing more then labels that we can apply at any commit in the history
+git tag <nameOfTheTag>	//this is a light weight tag, just a marker on a particular commit
+
+//to see a list of all the tags
+git tag --list
+
+
+------------- happy flow examples -------------
+//1. commit my current changes to a different branch 
+git stash save "some label for this stash"
+git branch -a	//list all branches
+git branch <newBranchName>	//create new branch
+git checkout <newBranchName>	
+git stash list	//see all stashed files
+git stash apply stash@{stashIndex}
+git stash drop stash@{stashIndex}	//to delete this particular stash
